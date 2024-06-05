@@ -18,7 +18,7 @@
 #include <gazebo/msgs/msgs.hh>
 #include <gazebo/rendering/UserCamera.hh>
 #include <gazebo/gui/KeyEventHandler.hh>
-
+#include <ignition/math/Vector3.hh>
 #include "TrafficLightsGUIPlugin.hh"
 
 using namespace gazebo;
@@ -77,10 +77,10 @@ void TrafficLightsGUIPlugin::Load(sdf::ElementPtr _sdf)
 void TrafficLightsGUIPlugin::OnKeyPress(ConstAnyPtr &_msg)
 {
   // Colors
-  auto red = std::make_pair(gazebo::common::Color::Red, "red");
-  auto yellow = std::make_pair(gazebo::common::Color::Yellow, "yellow");
-  auto green = std::make_pair(gazebo::common::Color::Green, "green");
-  auto black = gazebo::common::Color::Black;
+  auto red = std::make_pair(ignition::math::Color(1, 0, 0), "red");
+  auto yellow = std::make_pair(ignition::math::Color(1, 1, 0), "yellow");
+  auto green = std::make_pair(ignition::math::Color(0, 1, 0), "green");
+  auto black = ignition::math::Color(0, 0, 0);
 
   for (auto key : this->keys)
   {
@@ -100,6 +100,7 @@ void TrafficLightsGUIPlugin::OnKeyPress(ConstAnyPtr &_msg)
           msg.set_name(model + "::" + l + "::link::" + c.second);
 
           auto matMsg = msg.mutable_material();
+          
           if (c.second == color)
           {
             gazebo::msgs::Set(matMsg->mutable_emissive(), c.first);
